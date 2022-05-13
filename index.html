@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title>Touch Canvas</title>
+    <style>
+        body {
+            text-align: center;
+            background: linear-gradient(to right, rgb(242, 43, 43) 10%, rgb(58, 58, 241) 50%, rgb(40, 229, 40) 100%);
+            color: white;
+        }
+
+        #myCanvas {
+            border: 3px solid black;
+            background-color: white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        input,
+        button {
+            margin: 5px;
+            color: black;
+        }
+
+        button {
+            font-size: 17.5px;
+            background-color: white;
+            border: 1 ridge black;
+            color: black;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Touch Canvas</h1>
+    <canvas id="myCanvas" height="600" width="1000"></canvas>
+    <br>
+    <span>Color </span>
+    <input type="text" placeholder="Type here..." id="color">
+    <br>
+    <span>Width </span>
+    <input type="text" placeholder="Type here..." id="width">
+    <br>
+    <button onclick="eraseArea()">Erase</button>
+
+    <script>
+        canvas = document.getElementById('myCanvas');
+        ctx = canvas.getContext('2d');
+        var lastX;
+        var lastY;
+        var mouseEvent = '';
+        var color = 'Red';
+        var width = 2;
+        document.getElementById('color').value = color;
+        document.getElementById('width').value = width;
+
+        canvas.addEventListener('mousedown', mousedown);
+        function mousedown(e) {
+            color = document.getElementById('color').value;
+            width = document.getElementById('width').value;
+            mouseEvent = 'mousedown';
+        }
+
+        canvas.addEventListener('mousemove', mousemove);
+        function mousemove(e) {
+            currentX = e.clientX - canvas.offsetLeft;
+            currentY = e.clientY - canvas.offsetTop;
+            if (mouseEvent == 'mousedown') {
+                ctx.beginPath();
+                ctx.lineWidth = width;
+                ctx.strokeStyle = color;
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(currentX, currentY);
+                ctx.stroke();
+            }
+            lastX = currentX;
+            lastY = currentY;
+        }
+        canvas.addEventListener('mouseup', mouseup);
+        function mouseup(e) {
+            mouseEvent = 'mouseup';
+        }
+
+        canvas.addEventListener('mouseleave', mouseleave);
+        function mouseleave(e) {
+            mouseEvent = 'mouseleave';
+        }
+
+        function eraseArea() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        var width = screen.width;
+        var newWidth = screen.width - 75;
+        var newHeight = screen.height - 325;
+
+        if (width < 992) {
+            document.body.style.overflow = 'hidden';
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+        }
+
+        canvas.addEventListener('touchstart', touchmove);
+        function touchmove(e) {
+            last_position_of_x = e.touches[0].clientX - canvas.offsetLeft;
+            last_position_of_y = e.touches[0].clientY - canvas.offsetTop;
+        }
+
+        canvas.addEventListener("touchmove", touchmove);
+        function touchmove(e) {
+
+            current_position_of_mouse_x = e.touches[0].clientX - canvas.offsetLeft;
+            current_position_of_mouse_y = e.touches[0].clientY - canvas.offsetTop;
+
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.moveTo(last_position_of_x, last_position_of_y);
+            ctx.lineTo(current_position_of_mouse_x, current_position_of_mouse_y);
+            ctx.stroke();
+
+            last_position_of_x = current_position_of_mouse_x;
+            last_position_of_y = current_position_of_mouse_y;
+        }
+    </script>
+</body>
+
+</html>
