@@ -113,8 +113,8 @@
             canvas.height = newHeight;
         }
 
-        canvas.addEventListener('touchstart', touchmove);
-        function touchmove(e) {
+        canvas.addEventListener('touchstart', touchstart);
+        function touchstart(e) {
             last_position_of_x = e.touches[0].clientX - canvas.offsetLeft;
             last_position_of_y = e.touches[0].clientY - canvas.offsetTop;
         }
