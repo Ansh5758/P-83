@@ -124,6 +124,8 @@
 
             current_position_of_mouse_x = e.touches[0].clientX - canvas.offsetLeft;
             current_position_of_mouse_y = e.touches[0].clientY - canvas.offsetTop;
+            color = document.getElementById('color').value;
+            width = document.getElementById('width').value;
 
             ctx.beginPath();
             ctx.strokeStyle = color;
